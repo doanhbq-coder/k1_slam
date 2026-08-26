@@ -1,0 +1,206 @@
+map_server:
+  ros__parameters:
+    use_sim_time: false
+    # Overridden in launch by the "map" launch configuration or provided default value.
+    # To use in yaml, remove the default "map" value in the tb3_simulation_launch.py file & provide full path to map below.
+    yaml_filename: ""
+
+map_saver:
+  ros__parameters:
+    use_sim_time: false
+    save_map_timeout: 5.0
+    free_thresh_default: 0.25
+    occupied_thresh_default: 0.65
+    map_subscribe_transient_local: True
+
+amcl:
+  ros__parameters:
+    use_sim_time: false
+    alpha1: 0.4 # Độ lệch chuẩn cho lỗi trong chuyển động quay, giúp robot đánh giá chính xác hơn về khả năng xảy ra lỗi khi thực hiện các chuyển động quay, đặc biệt là khi robot phải xoay nhiều hoặc trong môi trường có nhiều chướng ngại vật.
+    alpha2: 0.4
+    alpha3: 0.4
+    alpha4: 0.4
+    alpha5: 0.4
+    base_frame_id: "base_footprint"
+    beam_skip_distance: 0.5
+    beam_skip_error_threshold: 0.9
+    beam_skip_threshold: 0.3
+    do_beamskip: false
+    global_frame_id: "map"
+    lambda_short: 0.1
+    laser_likelihood_max_dist: 2.0
+    laser_max_range: 20.0
+    laser_min_range: 0.2
+    laser_model_type: "likelihood_field"
+    max_beams: 60 # Số lượng chùm tia laser tối đa được sử dụng trong quá trình định vị, giúp cải thiện hiệu suất của thuật toán AMCL bằng cách giảm số lượng chùm tia cần xử lý, đặc biệt là trong môi trường có nhiều chướng ngại vật hoặc khi robot có cảm biến laser có độ phân giải cao.
+    max_particles: 2000
+    min_particles: 500
+    odom_frame_id: "odom"
+    pf_err: 0.05
+    pf_z: 0.99
+    recovery_alpha_fast: 0.0
+    recovery_alpha_slow: 0.0
+    resample_interval: 1
+    robot_model_type: "nav2_amcl::DifferentialMotionModel"
+    save_pose_rate: 0.5
+    sigma_hit: 0.2
+    tf_broadcast: true
+    transform_tolerance: 1.0
+    update_min_a: 0.2
+    update_min_d: 0.25
+    z_hit: 0.5
+    z_max: 0.05
+    z_rand: 0.5
+    z_short: 0.05
+    scan_topic: /neo_robotics/K1_demo/V0_0_0/scan_front
+
+slam_toolbox:
+  ros__parameters:
+
+    # Plugin params
+    solver_plugin: solver_plugins::CeresSolver
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_strategy: LEVENBERG_MARQUARDT
+    ceres_dogleg_type: TRADITIONAL_DOGLEG
+    ceres_loss_function: None
+
+    # ROS Parameters
+    odom: odom
+    map_frame: map
+    base_frame: base_footprint
+    scan_topic: /neo_robotics/K1_demo/V0_0_0/scan_front
+    use_map_saver: false
+    mode: localization
+    use_sim_time: false
+
+    # if you'd like to immediately start continuing a map at a given pose
+    # or at the dock, but they are mutually exclusive, if pose is given
+    # will use pose
+    # map_file_name: src/k1_nav/maps/map_v1
+    map_file_name: ""
+    map_start_pose: [0.0, 0.0, 0.0]
+    # map_start_at_dock: true
+
+    debug_logging: false
+    throttle_scans: 1
+    transform_publish_period: 0.02 #if 0 never publishes odometry
+    map_update_interval: 99999999.0
+    resolution: 0.05
+    restamp_tf: false
+    min_laser_range: 0.3 #for rastering images
+    max_laser_range: 20.0 #for rastering images
+    minimum_time_interval: 0.5
+    transform_timeout: 0.2
+    tf_buffer_duration: 30.
+    stack_size_to_use: 40000000 #// program needs a larger stack size to serialize large maps
+    enable_interactive_mode: true
+
+    # General Parameters
+    use_scan_matching: true
+    use_scan_barycenter: true
+    minimum_travel_distance: 0.05 # quang duong toi thieu de them du lieu vao map
+    minimum_travel_heading: 0.05 # goc toi thieu de them du lieu vao map
+    check_min_dist_and_heading_precisely: true # neu true thi se check chinh xac min_dist va min_heading truoc khi them du lieu vao map, neu false thi se check nhanh bang cach so sanh khoang cach di chuyen va goc di chuyen voi minimum_travel_distance va minimum_travel_heading
+    scan_buffer_size: 30 # so luong scan toi da duoc luu tru trong bo dem de su dung cho viec scan matching va loop closure
+    scan_buffer_maximum_scan_distance: 12.0
+    link_match_minimum_response_fine: 0.1  
+    link_scan_maximum_distance: 1.5 # gap 3 lan minimum_travel_distance
+    loop_search_maximum_distance: 6.0 # 1/2 max khoang cach scan match de tim loop closure
+    do_loop_closing: false
+    loop_match_minimum_chain_size: 10           
+    loop_match_maximum_variance_coarse: 3.0  
+    loop_match_minimum_response_coarse: 0.35    
+    loop_match_minimum_response_fine: 0.45
+
+    # Correlation Parameters - Correlation Parameters
+    correlation_search_space_dimension: 0.5
+    correlation_search_space_resolution: 0.01
+    correlation_search_space_smear_deviation: 0.1 
+
+    # Correlation Parameters - Loop Closure Parameters
+    loop_search_space_dimension: 8.0
+    loop_search_space_resolution: 0.05
+    loop_search_space_smear_deviation: 0.03
+
+    # Scan Matcher Parameters
+    distance_variance_penalty: 0.1 # Giảm xuống để cho phép dịch chuyển tự do hơn 
+    angle_variance_penalty: 0.3 # Giảm xuống để cho phép xoay góc tự do hơn theo laser
+    fine_search_angle_offset: 0.00349     
+    coarse_search_angle_offset: 0.349   
+    coarse_angle_resolution: 0.0349        
+    minimum_angle_penalty: 0.9
+    minimum_distance_penalty: 0.5
+    use_response_expansion: true
+    min_pass_through: 2
+    occupancy_threshold: 0.1
+
+  # ros__parameters:
+  #   # Plugin params
+  #   solver_plugin: solver_plugins::CeresSolver
+  #   ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+  #   ceres_preconditioner: SCHUR_JACOBI
+  #   ceres_trust_strategy: LEVENBERG_MARQUARDT
+  #   ceres_dogleg_type: TRADITIONAL_DOGLEG
+  #   ceres_loss_function: None
+
+  #   # ROS Parameters
+  #   odom_frame: odom
+  #   map_frame: map
+  #   base_frame: base_footprint
+  #   scan_topic: /neo_robotics/K1_demo/V0_0_0/scan_front
+  #   mode: localization
+  #   use_sim_time: false
+  #   use_map_saver: true
+
+  #   debug_logging: false
+  #   throttle_scans: 1
+  #   transform_publish_period: 0.02
+  #   map_update_interval: 99999999.0 # 5.0
+  #   resolution: 0.05
+  #   min_laser_range: 0.0
+  #   max_laser_range: 20.0
+  #   minimum_time_interval: 0.5
+  #   transform_timeout: 0.5
+  #   tf_buffer_duration: 30.
+  #   stack_size_to_use: 40000000
+
+  #   # General Parameters
+  #   use_scan_matching: true
+  #   use_scan_barycenter: true
+  #   minimum_travel_distance: 0.5
+  #   minimum_travel_heading: 0.5
+  #   scan_buffer_size: 3
+  #   scan_buffer_maximum_scan_distance: 10.0
+  #   link_match_minimum_response_fine: 0.1
+  #   link_scan_maximum_distance: 1.5
+  #   do_loop_closing: false
+  #   loop_match_minimum_chain_size: 3
+  #   loop_match_maximum_variance_coarse: 3.0
+  #   loop_match_minimum_response_coarse: 0.35
+  #   loop_match_minimum_response_fine: 0.45
+
+  #   # Correlation Parameters
+  #   correlation_search_space_dimension: 0.5
+  #   correlation_search_space_resolution: 0.01
+  #   correlation_search_space_smear_deviation: 0.1
+
+  #   # Loop Closure Parameters
+  #   loop_search_space_dimension: 8.0
+  #   loop_search_space_resolution: 0.05
+  #   loop_search_space_smear_deviation: 0.03
+  #   loop_search_maximum_distance: 3.0
+
+  #   # Scan Matcher Parameters
+  #   distance_variance_penalty: 0.5
+  #   angle_variance_penalty: 1.0
+  #   fine_search_angle_offset: 0.00349
+  #   coarse_search_angle_offset: 0.349
+  #   coarse_angle_resolution: 0.0349
+  #   minimum_angle_penalty: 0.9
+  #   minimum_distance_penalty: 0.5
+  #   use_response_expansion: true
+  #   min_pass_through: 2
+  #   occupancy_threshold: 0.1
+
+

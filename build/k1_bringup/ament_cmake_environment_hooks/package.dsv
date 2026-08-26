@@ -1,0 +1,4 @@
+source;share/k1_bringup/local_setup.bash
+source;share/k1_bringup/local_setup.dsv
+source;share/k1_bringup/local_setup.sh
+source;share/k1_bringup/local_setup.zsh
