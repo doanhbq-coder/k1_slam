@@ -1,9 +1,0 @@
-/home/neo/Documents/neo_k1/build/k1_odom/CMakeFiles/uninstall.dir
-/home/neo/Documents/neo_k1/build/k1_odom/CMakeFiles/k1_odom_uninstall.dir
-/home/neo/Documents/neo_k1/build/k1_odom/CMakeFiles/test.dir
-/home/neo/Documents/neo_k1/build/k1_odom/CMakeFiles/edit_cache.dir
-/home/neo/Documents/neo_k1/build/k1_odom/CMakeFiles/rebuild_cache.dir
-/home/neo/Documents/neo_k1/build/k1_odom/CMakeFiles/list_install_components.dir
-/home/neo/Documents/neo_k1/build/k1_odom/CMakeFiles/install.dir
-/home/neo/Documents/neo_k1/build/k1_odom/CMakeFiles/install/local.dir
-/home/neo/Documents/neo_k1/build/k1_odom/CMakeFiles/install/strip.dir

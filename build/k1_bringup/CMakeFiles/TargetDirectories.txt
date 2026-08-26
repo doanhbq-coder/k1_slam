@@ -1,9 +1,0 @@
-/home/neo/Documents/neo_k1/build/k1_bringup/CMakeFiles/uninstall.dir
-/home/neo/Documents/neo_k1/build/k1_bringup/CMakeFiles/k1_bringup_uninstall.dir
-/home/neo/Documents/neo_k1/build/k1_bringup/CMakeFiles/test.dir
-/home/neo/Documents/neo_k1/build/k1_bringup/CMakeFiles/edit_cache.dir
-/home/neo/Documents/neo_k1/build/k1_bringup/CMakeFiles/rebuild_cache.dir
-/home/neo/Documents/neo_k1/build/k1_bringup/CMakeFiles/list_install_components.dir
-/home/neo/Documents/neo_k1/build/k1_bringup/CMakeFiles/install.dir
-/home/neo/Documents/neo_k1/build/k1_bringup/CMakeFiles/install/local.dir
-/home/neo/Documents/neo_k1/build/k1_bringup/CMakeFiles/install/strip.dir
