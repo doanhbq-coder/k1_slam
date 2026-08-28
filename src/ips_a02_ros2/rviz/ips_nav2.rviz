@@ -1,0 +1,231 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /IPS Tags1
+        - /Map1
+      Splitter Ratio: 0.5
+    Tree Height: 640
+  - Class: rviz_common/Views
+    Name: Views
+    Expanded:
+      - /Current View1
+Visualization Manager:
+  Class: ""
+  Name: root
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid 1m
+      Enabled: true
+      Alpha: 0.35
+      Cell Size: 1
+      Color: 90; 100; 115
+      Line Style:
+        Line Width: 0.03
+        Value: Lines
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 30
+      Reference Frame: map
+    - Class: rviz_default_plugins/Map
+      Name: Map
+      Enabled: true
+      Alpha: 0.7
+      Color Scheme: map
+      Draw Behind: true
+      Update Topic:
+        Value: /map_updates
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map
+    - Class: rviz_default_plugins/Map
+      Name: Global Costmap
+      Enabled: false
+      Alpha: 0.4
+      Color Scheme: costmap
+      Draw Behind: false
+      Update Topic:
+        Value: /global_costmap/costmap_updates
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /global_costmap/costmap
+    - Class: rviz_default_plugins/Path
+      Name: Nav2 Path
+      Enabled: true
+      Alpha: 1
+      Buffer Length: 1
+      Color: 0; 255; 128
+      Line Style: Lines
+      Line Width: 0.03
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Style: None
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /plan
+    - Class: rviz_default_plugins/LaserScan
+      Name: LaserScan
+      Enabled: true
+      Alpha: 1
+      Color: 255; 180; 60
+      Color Transformer: FlatColor
+      Decay Time: 0
+      Position Transformer: XYZ
+      Size (m): 0.03
+      Style: Points
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /scan
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Align Anchors
+      Enabled: true
+      Namespaces: {}
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /ips/align/anchors
+    - Class: rviz_default_plugins/InteractiveMarkers
+      Name: Align Handle
+      Enabled: true
+      Interactive Markers Namespace: /ips_align
+      Show Axes: false
+      Show Descriptions: true
+      Show Visual Aids: false
+      Value: true
+    - Class: rviz_default_plugins/MarkerArray
+      Name: IPS Anchors
+      Enabled: true
+      Namespaces: {}
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /ips/anchors
+    - Class: rviz_default_plugins/MarkerArray
+      Name: IPS Fences
+      Enabled: true
+      Namespaces: {}
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /ips/fences
+    - Class: rviz_default_plugins/MarkerArray
+      Name: IPS Tags
+      Enabled: true
+      Namespaces: {}
+      Topic:
+        Depth: 1
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /ips/tags
+    - Class: rviz_default_plugins/PoseArray
+      Name: Tag Poses
+      Enabled: false
+      Alpha: 1
+      Arrow Length: 0.4
+      Axes Length: 0.3
+      Axes Radius: 0.03
+      Color: 255; 255; 255
+      Head Length: 0.1
+      Head Radius: 0.05
+      Shaft Length: 0.3
+      Shaft Radius: 0.02
+      Shape: Arrow (Flat)
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /ips/tag_poses
+    - Class: rviz_default_plugins/TF
+      Name: TF
+      Enabled: true
+      Frame Timeout: 15
+      Marker Scale: 0.6
+      Show Arrows: false
+      Show Axes: true
+      Show Names: true
+      Update Interval: 0
+      Tree Height: 200
+      Frames:
+        All Enabled: true
+  Global Options:
+    Background Color: 16; 22; 30
+    Fixed Frame: map
+    Frame Rate: 30
+  Tools:
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/SetGoal
+      Name: 2D Goal Pose
+      Topic:
+        Value: /goal_pose
+    - Class: rviz_default_plugins/PublishPoint
+      Name: Publish Point
+      Single click: true
+      Topic:
+        Value: /clicked_point
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+      Line color: 128; 128; 0
+  Transformation:
+    Current:
+      Class: rviz_default_plugins/TF
+  Value: true
+  Views:
+    Current:
+      Class: rviz_default_plugins/TopDownOrtho
+      Name: Nhìn từ trên (2D)
+      Angle: 0
+      Scale: 55
+      Target Frame: map
+      X: 1.8
+      Y: -5
+      Invert Z Axis: false
+      Near Clip Distance: 0.01
+    Saved:
+      - Class: rviz_default_plugins/Orbit
+        Name: Nhìn 3D
+        Distance: 22
+        Focal Point:
+          X: 1.8
+          Y: -5
+          Z: 0
+        Pitch: 0.9
+        Yaw: 1.2
+        Near Clip Distance: 0.01
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 900
+  Width: 1500
+  Hide Left Dock: false
+  Hide Right Dock: true
+  Views:
+    collapsed: false

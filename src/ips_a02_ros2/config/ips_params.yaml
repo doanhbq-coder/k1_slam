@@ -1,0 +1,113 @@
+# Tham số cho node ips_bridge.  Sửa file này rồi:
+#   ros2 launch ips_a02_ros2 ips_bringup.launch.py
+/ips_bridge:
+  ros__parameters:
+    # ---- chọn phương thức giao tiếp với IPS Tool: udp | mqtt | webhook ----
+    source: "udp"
+
+    udp:
+      port: 9600            # IPS Tool -> UDP: address = <ip máy chạy node>:9600
+      bind: "0.0.0.0"
+    mqtt:
+      broker: "127.0.0.1"   # broker phải chạy sẵn; IPS Tool publish vào đó
+      port: 1883
+      username: ""
+      password: ""
+      topics: ["ips/#"]
+      client_id: "ips_a02_ros2"
+    webhook:
+      port: 8091            # IPS Tool -> Webhook: http://<ip máy chạy node>:8091/ingest
+      path: "/ingest"
+
+    # ---- frame & TF ----
+    # ips_map = hệ toạ độ do 4 anchor định nghĩa (gốc ở A1).  Khớp vào bản đồ Nav2 bằng
+    # static TF map->ips_map do node ips_map_tf phát (xem NAV2_INTEGRATION.md B1).
+    frame_id: "ips_map"
+    tag_frame_prefix: "ips_"
+    robot_tag: ""           # ĐỂ TRỐNG: robot tự định vị bằng lidar, không lấy vị trí từ UWB
+    base_frame: "base_link"
+    publish_tf: true
+
+    # ---- xử lý dữ liệu ----
+    use_opt_poses: false    # true = dùng optPoses (đã ràng buộc tường) thay cho pos raw
+    yaw_from_velocity: true # UWB không cho hướng; suy yaw từ vector vận tốc khi đang di chuyển
+    max_noise: 0.0          # >0: bỏ mẫu có noiseRadius vượt ngưỡng (m)
+    offline_after: 3.0
+
+    # ---- hiển thị RViz ----
+    trail_length: 300
+    marker_rate: 10.0
+    tag_size: 0.28
+    velocity_scale: 0.7
+    show_trail: true
+    show_noise: true
+    show_velocity: true
+    show_coords: false      # true = in thêm toạ độ dưới tên tag (dễ rối khi nhiều tag)
+    label_size: 0.26
+
+    # ---- anchor & vùng ảo lấy từ HTTP OpenAPI của IPS Tool ----
+    openapi:
+      enabled: true
+      base_url: "http://192.168.68.142:8080"
+      poll_period: 30.0
+
+# LƯU Ý: ROS 2 không suy được kiểu của list RỖNG trong yaml -> tham số thành NOT_SET và
+# get_parameter() ném ParameterUninitializedException. Các node ở đây đọc tham số qua hàm bọc,
+# gặp NOT_SET thì lùi về mặc định khai trong code, nên `[]` dưới đây là an toàn.
+
+# ------------------------------------------------------------------ hiệu chuẩn (chạy một lần)
+# ros2 run ips_a02_ros2 ips_calib --ros-args --params-file <file này> -p calib_tag:=T1
+/ips_calib:
+  ros__parameters:
+    calib_tag: "T1"          # tag gắn trên robot lúc hiệu chuẩn
+    map_frame: "map"
+    base_frame: "base_footprint"
+    settle_time: 2.0         # gom mẫu trong ngần này giây trước lúc gọi capture
+    min_samples: 8
+    still_threshold: 0.05    # robot phải đứng yên trong cửa sổ đó
+    min_points: 3
+    max_rms: 0.5             # rms lớn hơn = hỏng, không ghi file
+    manual_pairs: []         # đường thủ công: [ips_x, ips_y, map_x, map_y, ...]
+    output: ""               # để trống = config/ips_map_transform.yaml trong share
+
+/ips_map_tf:
+  ros__parameters:
+    transform_file: ""       # để trống = config/ips_map_transform.yaml trong share
+
+# ------------------------------------------------------------------ điều hướng theo nút bấm
+# Số mặc định lấy từ đo thật ngày 2026-08-26: tag phát Pos ~1 Hz, giữ nút ~2 s thì Call lặp ~1 Hz.
+/ips_call_navigator:
+  ros__parameters:
+    map_frame: "map"
+    ips_frame: "ips_map"
+    robot_base_frame: "base_footprint"
+    action_name: "navigate_to_pose"
+    standoff: 0.9            # dừng cách người bao nhiêu mét (>= bán kính robot + 0.5)
+    max_pose_age: 3.0        # Pos về ~1 Hz -> đừng đặt 1.5, sẽ loại cả lệnh hợp lệ
+    max_noise: 2.0          # noiseRadius đo thực tế 0.11..0.28 m
+    rearm_gap: 3.0           # Call lặp ~1 Hz -> im lặng ngần này giây mới tính là lần bấm mới
+    allowed_tags: []         # rỗng = cho tất cả tag; điền tên hoặc uid để giới hạn
+    queue_policy: "preempt"  # preempt | ignore
+    costmap_topic: "/global_costmap/costmap"
+    search_radius: 1.5
+    lethal_threshold: 50
+    allow_unknown: false
+    # Ngoài khung anchor UWB vẫn cho toạ độ, độ chính xác giảm dần chứ không hỏng hẳn — đo thực
+    # tế thấy vẫn dùng được, nên MẶC ĐỊNH CHO PHÉP.  Lưới an toàn còn lại: `max_noise` (mẫu nhiễu
+    # cao bị loại) và kiểm tra costmap (đích phải là ô trống trong bản đồ).
+    #   check_anchor_box: true + anchor_box_margin lớn = chặn toạ độ vô lý mà vẫn nới vùng dùng
+    check_anchor_box: false
+    anchor_box_margin: 5.0
+    follow: false            # true = bám theo người suốt phiên gọi (goal cập nhật liên tục)
+    follow_min_move: 0.5
+    send_ack: true           # báo ngược về tag qua OpenAPI -> tag rung/nháy
+
+    # Điều khiển từ WEB IPS Tool.  Đo 2026-08-27: bấm Call/CancelCall trên web KHÔNG sinh uplink
+    # `Call`, mà sinh `Ack` kèm reqId — đó là đường duy nhất đọc được lệnh từ server.
+    #   bấm Call       -> {"name":"Ack","data":{"reqId":"CallAck"}}
+    #   bấm CancelCall -> {"name":"Ack","data":{"reqId":"CancelCallAck"}}
+    trigger_on_ack: true
+    ack_call_req_id: "CallAck"
+    ack_cancel_req_id: "CancelCallAck"
+    ack_echo_window: 5.0     # chặn vòng lặp: chính node cũng gửi Ack(CallAck) xuống tag
+    openapi_url: "http://192.168.68.142:8080"

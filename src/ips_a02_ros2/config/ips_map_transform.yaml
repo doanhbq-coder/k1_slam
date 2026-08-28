@@ -1,0 +1,17 @@
+# Sinh tự động — ĐỪNG sửa tay (chạy lại ips_align hoặc ips_calib).
+# 2026-08-27 14:27:36 · nguồn: ips_align 2 điểm (A1, A4) · 2 điểm
+# Hiệu chuẩn lại khi: quét lại bản đồ SLAM · di chuyển anchor · đổi gốc trong IPS Tool.
+ips_map_tf:
+  ros__parameters:
+    parent_frame: "map"
+    child_frame: "ips_map"
+    x: -1.052128
+    y: -6.023586
+    yaw: 2.311969          # radian = 132.466 deg
+    n_points: 2
+    source: "ips_align 2 điểm (A1, A4)"
+# Dữ liệu thô, giữ lại để tính lại được:
+#   anchor A4: ips=(0.000, -10.200)  map=(6.472, 0.863)
+#   anchor A3: ips=(3.600, -10.200)  map=(4.042, 3.519)
+#   anchor A2: ips=(3.600, 0.000)  map=(-3.483, -3.368)
+#   anchor A1: ips=(0.000, 0.000)  map=(-1.052, -6.024)
