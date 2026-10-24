@@ -102,5 +102,5 @@ def generate_launch_description():
         # amcl,
         start_localization_slam_toolbox_node,
         lifecycle_manager_loc,
-        rviz_node
+        # rviz_node
     ])

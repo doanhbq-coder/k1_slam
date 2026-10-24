@@ -26,6 +26,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     pkg_share = get_package_share_directory('k1_bringup')
+    k1_odom_share = get_package_share_directory('k1_odom')
 
     config_file = LaunchConfiguration('config_file')
     cmd_vel_out = LaunchConfiguration('cmd_vel_out')
@@ -34,6 +35,7 @@ def generate_launch_description():
     use_joy = LaunchConfiguration('use_joy')
     use_twist_mux = LaunchConfiguration('use_twist_mux')
     use_relay = LaunchConfiguration('use_relay')
+    use_ekf = LaunchConfiguration('use_ekf')
 
     declared_args = [
         DeclareLaunchArgument(
@@ -71,6 +73,11 @@ def generate_launch_description():
             default_value='true',
             description='Start the Twist -> TwistStamped relay to the base',
         ),
+        DeclareLaunchArgument(
+            'use_ekf',
+            default_value='true',
+            description='Start the EKF node',
+        ),
     ]
 
     joy_teleop = IncludeLaunchDescription(
@@ -98,4 +105,15 @@ def generate_launch_description():
         }],
     )
 
-    return LaunchDescription(declared_args + [joy_teleop, cmd_vel_relay])
+    ekf = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(k1_odom_share, 'launch', 'ekf.launch.py')
+        ),
+        condition=IfCondition(use_ekf),
+    )
+
+    return LaunchDescription(declared_args + [
+        joy_teleop, 
+        cmd_vel_relay, 
+        ekf
+    ])
